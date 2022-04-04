@@ -1,0 +1,65 @@
+IMPUT:
+- m: numero crediti 
+- Esami: insieme di esami nel DB ESAMI= {e1,e2,..,en}
+
+OUTPUT:
+- Sottoinsieme di esami, tale che:
+	* Somma esami.crediti=m;
+	* Media esami.voto sia max;
+	
+APPROCIO 1 (il più stupido):
+- Ad ogni livello L della ricorsione inserisco un esame in PARZIALE. Devo decidere quale
+  -> Li provo tutti
+  Soluzione PARZIALE = ad ogni livello L, PARZIALE sarà un sottoinsieme di esattamente L esami.
+  Generazione di sottoproblemi= aggiungere un nuovo esame a PARZIALE, tra quelli che non ho ancora aggiunto. 
+  	PARZIALE = PARZIALE + ESAMI(i)
+  	
+  	L=0 -> N secelte possibili
+  		PARZIALE={e1}
+  			L=1
+  				PARZIALE={e1,e2}
+  					L=2
+  						PARZIALE={e1,e2,e3}
+  						 	[...]
+  			L=1
+  				PARZIALE=={e1,e3}
+  					L=2
+  						PARZIALE={e1,e3,e2}
+  							[...]
+  							
+  							
+  		PARZIALE={e2}
+  			L=1
+  				PARZIALE={e2,e1}
+  					[...]
+  					
+  		[...]
+  		PARZIALE={en}
+ Così stiamo esplorando delle soluzioni inutili, perchè in questo tipo di problema l'ordine non conterà
+ 
+ CASI TERMINALI:
+ 1) L=N (numero di esami)
+ 2) PARZIALE.sommaCrediti()==M -> Potrebbe essere una soluzione (non è detto che sia la migliore)
+ 	-> Controllo se è la soluzione migliore, calcolando la media voto
+ 	ELSE SE PARZIALE.SommaCrediti()>M -> non può essere una soluzione  -> esco dalla ricorsione
+ 			return
+ 		
+ APPROCIO 2 (più furbo) -> complessità 2^N
+ 
+ Generare i sottoproblemi 1 per volta, scorrendo l'insieme di esami di partenza in ordine, decidendo per ogni
+ esame:
+ 	- Se debba essere inserito
+ 	- Se non debba essere inserito
+ 	
+ Il livello della ricorsione == esame da considerare
+ L=0 -> 2 scelte possibili
+ 		Parziale={e1}
+ 			L=1
+ 				PARZIALE={e1,e2}
+ 				
+ 				PARZIALE={e1}
+ 		PARZIALE={}
+ 			L=1
+ 				PARZIALE={e2}
+ 				
+ 				PARZIALE={}
