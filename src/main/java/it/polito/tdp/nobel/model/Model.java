@@ -23,11 +23,39 @@ public class Model {
 		migliore=new HashSet<Esame>();
 		mediaMigliore=0;
 		Set<Esame> parziale=new HashSet<Esame>();
-		cerca(parziale,0,m);
+		// cerca(parziale,0,m);
+		cerca2(parziale,0,m);
 		return migliore;	
 	}
 
 	
+	private void cerca2(Set<Esame> parziale, int l, int m) {
+		// Controllare i casi terminali
+		int sommaCrediti=sommaCrediti(parziale);
+		if(sommaCrediti>m) // Soluzione non valida
+			return;
+		if(sommaCrediti==m) { // Soluzione valida, valutiamo se è la migliore soluzione fino a qui
+			double mediaVoti=calcolaMedia(parziale);
+			if(mediaVoti>mediaMigliore) {
+				migliore=new HashSet<Esame>(parziale);
+				mediaMigliore=mediaVoti;
+			}
+			return;
+		}
+		// Sicuramente crediti<m
+		if(l==esami.size()) 
+			return;	
+				
+		// Provo ad aggiungere esami[L]
+		parziale.add(esami.get(l));
+		cerca2(parziale,l+1,m);
+		
+		// Provo a non aggiungere esami[L]
+		parziale.remove(esami.get(l));
+		cerca2(parziale,l+1,m);
+	}
+
+/*
 	private void cerca(Set<Esame> parziale, int l, int m) {
 		// Controllare i casi terminali
 		int sommaCrediti=sommaCrediti(parziale);
@@ -53,7 +81,7 @@ public class Model {
 				parziale.remove(e); // con List backttracking parzile.remove(list.size()-1);
 		}
 	}
-
+*/
 
 	public double calcolaMedia(Set<Esame> esami) {
 		
